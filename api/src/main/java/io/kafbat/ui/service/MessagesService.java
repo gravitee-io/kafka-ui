@@ -205,8 +205,8 @@ public class MessagesService {
                                                              Map<String, Object> additionalProps) {
     Properties properties = new Properties();
     KafkaClientSslPropertiesUtil.addKafkaSslProperties(cluster.getSsl(), properties);
-    properties.putAll(cluster.getProperties());
-    properties.putAll(cluster.getProducerProperties());
+//    properties.putAll(cluster.getProperties());
+//    properties.putAll(cluster.getProducerProperties());
     properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, cluster.getBootstrapServers());
     properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
     properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
