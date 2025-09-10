@@ -85,32 +85,33 @@ public class SerdesInitializer {
   public ClusterSerdes init(Environment env,
                             ClustersProperties clustersProperties,
                             int clusterIndex) {
-    ClustersProperties.Cluster clusterProperties = clustersProperties.getClusters().get(clusterIndex);
-    log.debug("Configuring serdes for cluster {}", clusterProperties.getName());
+
+    //ClustersProperties.Cluster clusterProperties = clustersProperties.getClusters().get(clusterIndex);
+    //log.debug("Configuring serdes for cluster {}", clusterProperties.getName());
 
     var globalPropertiesResolver = new PropertyResolverImpl(env);
     var clusterPropertiesResolver = new PropertyResolverImpl(env, "kafka.clusters." + clusterIndex);
 
     Map<String, SerdeInstance> registeredSerdes = new LinkedHashMap<>();
     // initializing serdes from config
-    if (clusterProperties.getSerde() != null) {
-      for (int i = 0; i < clusterProperties.getSerde().size(); i++) {
-        ClustersProperties.SerdeConfig serdeConfig = clusterProperties.getSerde().get(i);
-        if (Strings.isNullOrEmpty(serdeConfig.getName())) {
-          throw new ValidationException("'name' property not set for serde: " + serdeConfig);
-        }
-        if (registeredSerdes.containsKey(serdeConfig.getName())) {
-          throw new ValidationException("Multiple serdes with same name: " + serdeConfig.getName());
-        }
-        var instance = createSerdeFromConfig(
-            serdeConfig,
-            new PropertyResolverImpl(env, "kafka.clusters." + clusterIndex + ".serde." + i + ".properties"),
-            clusterPropertiesResolver,
-            globalPropertiesResolver
-        );
-        registeredSerdes.put(serdeConfig.getName(), instance);
-      }
-    }
+//    if (clusterProperties.getSerde() != null) {
+//      for (int i = 0; i < clusterProperties.getSerde().size(); i++) {
+//        ClustersProperties.SerdeConfig serdeConfig = clusterProperties.getSerde().get(i);
+//        if (Strings.isNullOrEmpty(serdeConfig.getName())) {
+//          throw new ValidationException("'name' property not set for serde: " + serdeConfig);
+//        }
+//        if (registeredSerdes.containsKey(serdeConfig.getName())) {
+//          throw new ValidationException("Multiple serdes with same name: " + serdeConfig.getName());
+//        }
+//        var instance = createSerdeFromConfig(
+//            serdeConfig,
+//            new PropertyResolverImpl(env, "kafka.clusters." + clusterIndex + ".serde." + i + ".properties"),
+//            clusterPropertiesResolver,
+//            globalPropertiesResolver
+//        );
+//        registeredSerdes.put(serdeConfig.getName(), instance);
+//      }
+//    }
 
     // initializing remaining built-in serdes with empty selection patters
     builtInSerdeClasses.forEach((name, clazz) -> {
@@ -126,14 +127,8 @@ public class SerdesInitializer {
 
     return new ClusterSerdes(
         registeredSerdes,
-        Optional.ofNullable(clusterProperties.getDefaultKeySerde())
-            .map(name -> Preconditions.checkNotNull(registeredSerdes.get(name), "Default key serde not found"))
-            .orElse(null),
-        Optional.ofNullable(clusterProperties.getDefaultValueSerde())
-            .map(name -> Preconditions.checkNotNull(registeredSerdes.get(name), "Default value serde not found"))
-            .or(() -> Optional.ofNullable(registeredSerdes.get(SchemaRegistrySerde.name())))
-            .or(() -> Optional.ofNullable(registeredSerdes.get(ProtobufFileSerde.name())))
-            .orElse(null),
+        null,
+        null,
         createFallbackSerde()
     );
   }

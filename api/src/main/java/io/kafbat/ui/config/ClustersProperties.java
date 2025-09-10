@@ -43,6 +43,16 @@ public class ClustersProperties {
   CacheProperties cache = new CacheProperties();
   ClusterFtsProperties fts = new ClusterFtsProperties();
 
+  GraviteeProperties gravitee = new GraviteeProperties();
+
+  @Data
+  @ToString(exclude = {"managementApiPassword"})
+  public static class GraviteeProperties {
+    String managementApiUrl;
+    String managementApiOrgAdminUsername;
+    String managementApiOrgAdminPassword;
+  }
+
   @Data
   public static class Cluster {
     @NotBlank(message = "field name for for cluster could not be blank")

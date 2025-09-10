@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nullable;
 import javax.validation.ValidationException;
 import org.springframework.core.env.Environment;
@@ -34,11 +35,14 @@ public class DeserializationService implements Closeable {
                                 ClustersStorage clustersStorage,
                                 ClustersProperties clustersProperties) {
     var serdesInitializer = new SerdesInitializer();
-    for (int i = 0; i < clustersProperties.getClusters().size(); i++) {
-      var clusterProperties = clustersProperties.getClusters().get(i);
-      var cluster = clustersStorage.getClusterByName(clusterProperties.getName()).get();
-      clusterSerdes.put(cluster.getName(), serdesInitializer.init(env, clustersProperties, i));
-    }
+    final AtomicInteger index = new AtomicInteger(0);
+    clustersStorage.getKafkaClusters().forEach(c -> clusterSerdes.put(c.getName(), serdesInitializer.init(env, clustersProperties, index.getAndIncrement())));
+
+//    for (int i = 0; i < clustersProperties.getClusters().size(); i++) {
+//      var clusterProperties = clustersProperties.getClusters().get(i);
+//      var cluster = clustersStorage.getClusterByName(clusterProperties.getName()).get();
+//      clusterSerdes.put(cluster.getName(), serdesInitializer.init(env, clustersProperties, i));
+//    }
   }
 
   public ClusterSerdes getSerdesFor(String clusterName) {
