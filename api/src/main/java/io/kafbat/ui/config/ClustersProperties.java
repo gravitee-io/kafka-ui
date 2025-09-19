@@ -46,11 +46,12 @@ public class ClustersProperties {
   GraviteeProperties gravitee = new GraviteeProperties();
 
   @Data
-  @ToString(exclude = {"managementApiPassword"})
+  @ToString(exclude = {"managementApiOrgAdminPassword", "managementApiOrgAdminToken"})
   public static class GraviteeProperties {
     String managementApiUrl;
     String managementApiOrgAdminUsername;
     String managementApiOrgAdminPassword;
+    String managementApiOrgAdminToken;
   }
 
   @Data

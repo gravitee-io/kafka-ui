@@ -125,6 +125,20 @@ public class WebClientConfigurator {
     return this;
   }
 
+  public WebClientConfigurator configureBearerAuthentication(@Nullable String token) {
+    if (token != null) {
+      builder.defaultHeaders(httpHeaders -> httpHeaders.setBearerAuth(token));
+    }
+    return this;
+  }
+
+  public WebClientConfigurator configureBaseUrl(String baseUrl) {
+    if (baseUrl != null) {
+      builder.baseUrl(baseUrl);
+    }
+    return this;
+  }
+
   public WebClientConfigurator configureBufferSize(DataSize maxBuffSize) {
     builder.codecs(c -> c.defaultCodecs().maxInMemorySize((int) maxBuffSize.toBytes()));
     return this;

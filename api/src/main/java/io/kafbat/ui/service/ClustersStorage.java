@@ -41,7 +41,18 @@ public class ClustersStorage {
 
   public ClustersStorage(ClustersProperties properties, KafkaClusterFactory factory) {
     var builder = ImmutableMap.<String, KafkaCluster>builder();
-    WebClient httpClient = new WebClientConfigurator().configureBasicAuth(properties.getGravitee().getManagementApiOrgAdminUsername(), properties.getGravitee().getManagementApiOrgAdminPassword()  ).build();
+
+    WebClientConfigurator webClientConfigurator = new WebClientConfigurator().configureBaseUrl(properties.getGravitee().getManagementApiUrl());
+
+    String token = properties.getGravitee().getManagementApiOrgAdminToken();
+    if(token != null && !token.isBlank()) {
+      webClientConfigurator.configureBearerAuthentication(token);
+    } else {
+      webClientConfigurator.configureBasicAuth(properties.getGravitee().getManagementApiOrgAdminUsername(),
+          properties.getGravitee().getManagementApiOrgAdminPassword());
+    }
+    WebClient httpClient = webClientConfigurator.build();
+
     getKafkaClusters(httpClient, properties, factory).forEach(c -> builder.put(c.getName(), create(properties, factory, c)));
     this.kafkaClusters = builder.build();
   }
@@ -58,7 +69,7 @@ public class ClustersStorage {
     // Call Clusters resources
     return httpClient
         .get()
-        .uri(properties.getGravitee().getManagementApiUrl() + "/clusters")
+        .uri("/clusters")
         .retrieve()
         .bodyToMono(ClustersResponse.class)
         .flatMapIterable(ClustersResponse::getData)
