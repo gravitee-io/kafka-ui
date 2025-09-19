@@ -1,19 +1,14 @@
 auth:
-  type: DISABLED
+  type: GRAVITEE
+  jwt:
+    secret: myJWT4Gr4v1t33_S3cr3t_F0r_K4fB4t
 
 kafka:
   gravitee:
     managementApiUrl: http://localhost:8083/management/v2/organizations/DEFAULT/environments/DEFAULT
-    managementApiOrgAdminUsername: admin
-    managementApiOrgAdminPassword: admin
-#  clusters:
-#    - name: local
-#      bootstrapServers: myapi.kafka.local:9092
-#      ssl:
-#        truststore-location: ~/Gravitee/kafka-tests/docker/config/ssl/server.truststore.jks
-#        truststore-password: gravitee
-#    - name: direct
-#      bootstrapServers: localhost:9091
+ #   managementApiOrgAdminUsername: admin
+ #   managementApiOrgAdminPassword: admin
+    managementApiOrgAdminToken: 57a72a8d-fe07-463d-a72a-8dfe07963dab # Put here a personal access token to APIM
 
 management:
   endpoint:
@@ -32,4 +27,32 @@ logging:
     io.kafbat.ui: DEBUG
     reactor.netty.http.server.AccessLog: INFO
     org.hibernate.validator: WARN
+
+rbac:
+  default-role:
+    permissions:
+      - resource: clusterconfig
+        actions: [ "view" ]
+
+      - resource: topic
+        value: ".*"
+        actions:
+          - VIEW
+          - MESSAGES_READ
+          - ANALYSIS_VIEW
+
+      - resource: consumer
+        value: ".*"
+        actions: [ view ]
+
+      - resource: schema
+        value: ".*"
+        actions: [ view ]
+
+      - resource: connect
+        value: ".*"
+        actions: [ view ]
+
+      - resource: acl
+        actions: [ view ]
 

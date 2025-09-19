@@ -97,6 +97,10 @@ dependencies {
     }
     implementation libs.snappy
 
+    implementation libs.jjwt.api
+    runtimeOnly libs.jjwt.impl
+    runtimeOnly libs.jjwt.jackson
+
     // Annotation processors
     implementation libs.lombok
     implementation libs.mapstruct

@@ -138,17 +138,12 @@ public class AccessControlService {
         .map(SecurityContext::getAuthentication)
         .filter(authentication -> authentication.getPrincipal() instanceof RbacUser)
         .map(authentication -> ((RbacUser) authentication.getPrincipal()))
-        .map(user -> new AuthenticatedUser(user.name(), user.groups()));
+        .map(user -> new AuthenticatedUser(user.name(), user.groups(), user.clusters()));
   }
 
   private boolean isClusterAccessible(String clusterName, AuthenticatedUser user) {
     Assert.isTrue(StringUtils.isNotEmpty(clusterName), "cluster value is empty");
-    boolean isAccessible = properties.getRoles()
-        .stream()
-        .filter(filterRole(user))
-        .anyMatch(role -> role.getClusters().stream().anyMatch(clusterName::equalsIgnoreCase));
-    
-    return isAccessible || properties.getDefaultRole() != null;
+    return user.clusters().contains(clusterName);
   }
 
   public Mono<Boolean> isClusterAccessible(ClusterDTO cluster) {
