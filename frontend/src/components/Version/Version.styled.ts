@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
 `;
 
 const textStyle = css`
-  font-family: Inter, sans-serif;
+  font-family: Manrope, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;

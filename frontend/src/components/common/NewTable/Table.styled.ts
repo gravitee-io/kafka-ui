@@ -118,7 +118,7 @@ export const Th = styled.th<ThProps>(
   border-bottom-width: 1px;
   vertical-align: middle;
   text-align: left;
-  font-family: Inter, sans-serif;
+  font-family: Manrope, sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

@@ -69,7 +69,7 @@ const DESCMixin = css(
 
 export const Title = styled.span<TitleProps>(
   ({ isOrderable, isOrdered, sortOrder, theme: { table } }) => css`
-    font-family: Inter, sans-serif;
+    font-family: Manrope, sans-serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -93,7 +93,7 @@ export const Title = styled.span<TitleProps>(
 
 export const Preview = styled.span`
   margin-left: 8px;
-  font-family: Inter, sans-serif;
+  font-family: Manrope, sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 16px;

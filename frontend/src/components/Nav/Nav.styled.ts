@@ -15,8 +15,10 @@ export const ClusterList = styled.ul.attrs<{ $colorKey: ClusterColorKey }>({
   role: 'menu',
 })`
   border-radius: 8px;
+  border: 1px solid
+    ${({ theme, $colorKey }) => theme.clusterMenu.backgroundColor[$colorKey]};
   padding: 2px 4px;
-  margin-bottom: 2px;
+  margin-bottom: 8px;
   background-color: ${({ theme, $colorKey }) =>
     theme.clusterMenu.backgroundColor[$colorKey]};
 `;

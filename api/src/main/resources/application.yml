@@ -5,10 +5,10 @@ auth:
 
 kafka:
   gravitee:
-    managementApiUrl: http://localhost:8083/management/v2/organizations/DEFAULT/environments/DEFAULT
+ #   managementApiUrl: http://localhost:8083/management/v2/organizations/DEFAULT/environments/DEFAULT
  #   managementApiOrgAdminUsername: admin
  #   managementApiOrgAdminPassword: admin
-    managementApiOrgAdminToken: 57a72a8d-fe07-463d-a72a-8dfe07963dab # Put here a personal access token to APIM
+ #   managementApiOrgAdminToken: 57a72a8d-fe07-463d-a72a-8dfe07963dab # Put here a personal access token to APIM
 
 management:
   endpoint:

@@ -19,6 +19,7 @@ export const MenuItem = styled('li').attrs({ role: 'menuitem' })<{
     justify-content: space-between;
     user-select: none;
     width: 100%;
+    margin: 4px 0;
     padding: 6px 8px;
     cursor: pointer;
     text-decoration: none;
@@ -31,7 +32,9 @@ export const MenuItem = styled('li').attrs({ role: 'menuitem' })<{
       : theme.menu[$variant].color.normal};
 
     &:hover {
-      background-color: ${theme.menu[$variant].backgroundColor.hover};
+      background-color: ${$isActive
+        ? theme.menu[$variant].backgroundColor.active
+        : theme.menu[$variant].backgroundColor.hover};
       color: ${theme.menu[$variant].color.hover};
 
       ${ColorPickerWrapper} {

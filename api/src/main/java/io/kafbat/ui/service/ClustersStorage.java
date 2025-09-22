@@ -5,6 +5,7 @@ import io.kafbat.ui.config.ClustersProperties;
 import io.kafbat.ui.model.KafkaCluster;
 import io.kafbat.ui.model.gravitee.Cluster;
 import io.kafbat.ui.model.gravitee.ClustersResponse;
+import io.kafbat.ui.model.gravitee.security.Security;
 import io.kafbat.ui.model.gravitee.security.SecurityProtocol;
 import io.kafbat.ui.model.gravitee.security.sasl.SaslMechanism;
 import io.kafbat.ui.model.gravitee.security.sasl.awsmskiam.AwsMskIamSaslMechanism;
@@ -42,14 +43,20 @@ public class ClustersStorage {
   public ClustersStorage(ClustersProperties properties, KafkaClusterFactory factory) {
     var builder = ImmutableMap.<String, KafkaCluster>builder();
 
-    WebClientConfigurator webClientConfigurator = new WebClientConfigurator().configureBaseUrl(properties.getGravitee().getManagementApiUrl());
+    String managementApiUrl = properties.getGravitee().getManagementApiUrl();
+    log.debug("Using Gravitee Management API URL: {}", managementApiUrl);
+    WebClientConfigurator webClientConfigurator = new WebClientConfigurator().configureBaseUrl(managementApiUrl);
 
     String token = properties.getGravitee().getManagementApiOrgAdminToken();
     if(token != null && !token.isBlank()) {
+      log.debug("Using token for Gravitee Management API");
       webClientConfigurator.configureBearerAuthentication(token);
     } else {
-      webClientConfigurator.configureBasicAuth(properties.getGravitee().getManagementApiOrgAdminUsername(),
-          properties.getGravitee().getManagementApiOrgAdminPassword());
+      String managementApiOrgAdminUsername = properties.getGravitee().getManagementApiOrgAdminUsername();
+      String managementApiOrgAdminPassword = properties.getGravitee().getManagementApiOrgAdminPassword();
+      log.debug("Using username for Gravitee Management API: {}", managementApiOrgAdminUsername);
+      webClientConfigurator.configureBasicAuth(managementApiOrgAdminUsername,
+          managementApiOrgAdminPassword);
     }
     WebClient httpClient = webClientConfigurator.build();
 
@@ -81,13 +88,16 @@ public class ClustersStorage {
     ClustersProperties.Cluster cluster = new ClustersProperties.Cluster();
     cluster.setName(apimCluster.getName());
     cluster.setBootstrapServers(apimCluster.getConfiguration().getBootstrapServers());
-    SecurityProtocol protocol = apimCluster.getConfiguration().getSecurity().getProtocol();
-    if(protocol == SecurityProtocol.SASL_SSL || protocol == SecurityProtocol.SASL_PLAINTEXT) {
-      SaslMechanism saslMechanism = apimCluster.getConfiguration().getSecurity().getSasl().getMechanism();
-      Map<String, Object> saslConfig = createProperties(saslMechanism);
-      saslConfig.put("security.protocol", protocol.name());
-      saslConfig.put(SASL_MECHANISM, saslMechanism.getType().name());
-      cluster.setProperties(saslConfig);
+    Security security = apimCluster.getConfiguration().getSecurity();
+    if (security != null) {
+      SecurityProtocol protocol = security.getProtocol();
+      if (protocol == SecurityProtocol.SASL_SSL || protocol == SecurityProtocol.SASL_PLAINTEXT) {
+        SaslMechanism saslMechanism = security.getSasl().getMechanism();
+        Map<String, Object> saslConfig = createProperties(saslMechanism);
+        saslConfig.put("security.protocol", protocol.name());
+        saslConfig.put(SASL_MECHANISM, saslMechanism.getType().name());
+        cluster.setProperties(saslConfig);
+      }
     }
     return factory.create(properties, cluster);
   }

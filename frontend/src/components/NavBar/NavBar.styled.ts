@@ -93,22 +93,25 @@ export const Hyperlink = styled(Link)(
     align-items: center;
     gap: 8px;
 
-    margin: 0;
-    padding: 0.5rem 0.6rem;
+    margin: 0.5rem;
+    padding: 0.5rem 0.5rem;
 
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 22px;
-    line-height: 16px;
-    color: ${theme.default.color.normal};
+    font-family: Manrope, sans-serif;
+    font-weight: 550;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.4px;
+    color: ${theme.menu.primary.color.normal};
 
     &:hover {
-      color: ${theme.default.color.normal};
+      color: ${theme.menu.primary.color.normal};
     }
 
     text-decoration: none;
     word-break: break-word;
     cursor: pointer;
+    border: 1px solid ${theme.link.hoverColor};
+    border-radius: 5px;
+    background-color: ${theme.link.backgroundColor};
   `
 );
