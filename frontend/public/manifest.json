@@ -1,15 +1,10 @@
 {
-  "name": "Kafbat UI",
+  "name": "Kakfa Console",
   "icons": [
     {
-      "src": "/favicon/icon-192.png",
+      "src": "/favicon/gravitee_logo_solaris.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/favicon/icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "64x62"
     }
   ]
 }

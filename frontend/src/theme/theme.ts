@@ -38,20 +38,20 @@ const Colors = {
   },
   brand: {
     '0': '#FFFFFF',
-    '3': '#F9FAFA',
+    '3': '#F7F8F8',
     '5': '#F1F2F3',
     '10': '#E3E6E8',
     '15': '#D5DADD',
     '20': '#C7CED1',
     '30': '#ABB5BA',
     '40': '#8F9CA3',
-    '50': '#73848C',
-    '60': '#5C6970',
-    '70': '#454F54',
+    '50': '#565454',
+    '60': '#5C5959',
+    '70': '#322F2F',
     '80': '#2F3639',
     '85': '#22282A',
     '90': '#171A1C',
-    '95': '#0B0D0E',
+    '95': '#1E1B1B',
   },
   red: {
     '10': '#FAD1D1',
@@ -93,7 +93,7 @@ const Colors = {
     pink: '#D926D9',
   },
   clusterMenuBackgroundColor: {
-    transparent: 'transparent',
+    transparent: hexToRgba('#5C5959', 0.1),
     gray: hexToRgba('#808080', 0.1),
     red: hexToRgba('#BF4040', 0.1),
     orange: hexToRgba('#BF8340', 0.1),
@@ -208,7 +208,7 @@ const baseTheme = {
   layout: {
     minWidth: '1200px',
     navBarWidth: '240px',
-    navBarHeight: '51px',
+    navBarHeight: '61px',
     rightSidebarWidth: '70vw',
     filtersSidebarWidth: '300px',
 
@@ -288,7 +288,7 @@ const baseTheme = {
     newFilterIcon: Colors.brand[50],
     closeModalIcon: Colors.neutral[25],
     savedIcon: Colors.brand[50],
-    dropdownArrowIcon: Colors.neutral[50],
+    dropdownArrowIcon: Colors.brand[0],
     github: {
       hover: Colors.neutral[90],
       active: Colors.neutral[70],
@@ -432,7 +432,7 @@ export const theme = {
     },
   },
   logo: {
-    color: Colors.brand[90],
+    color: Colors.brand[0],
   },
   version: {
     currentVersion: {
@@ -444,18 +444,19 @@ export const theme = {
   },
   default: {
     color: {
-      normal: Colors.neutral[90],
+      normal: Colors.neutral[0],
     },
-    backgroundColor: Colors.brand[0],
+    backgroundColor: Colors.brand[3],
     transparentColor: 'transparent',
   },
   link: {
+    backgroundColor: Colors.brand[70],
     color: Colors.brand[50],
     hoverColor: Colors.brand[60],
   },
   user: {
-    color: Colors.brand[70],
-    hoverColor: Colors.brand[50],
+    color: Colors.brand[0],
+    hoverColor: Colors.brand[0],
   },
   hr: {
     backgroundColor: Colors.neutral[5],
@@ -558,16 +559,16 @@ export const theme = {
     },
     text: {
       backgroundColor: {
+        normal: Colors.brand[95],
+        hover: Colors.brand[60],
+        active: Colors.brand[60],
+        disabled: Colors.brand[95],
+      },
+      color: {
         normal: Colors.brand[0],
         hover: Colors.brand[0],
         active: Colors.brand[0],
         disabled: Colors.brand[0],
-      },
-      color: {
-        normal: Colors.brand[70],
-        hover: Colors.brand[90],
-        active: Colors.brand[50],
-        disabled: Colors.brand[40],
       },
     },
     height: {
@@ -597,7 +598,7 @@ export const theme = {
   },
   menu: {
     header: {
-      backgroundColor: Colors.brand[0],
+      backgroundColor: Colors.brand[95],
     },
     primary: {
       backgroundColor: {
@@ -606,34 +607,35 @@ export const theme = {
         active: 'transparent',
       },
       color: {
-        normal: Colors.neutral[50],
-        hover: Colors.neutral[90],
-        active: Colors.neutral[95],
+        normal: Colors.neutral[0],
+        hover: Colors.neutral[0],
+        active: Colors.neutral[0],
       },
       statusIconColor: {
         online: Colors.green[40],
         offline: Colors.red[50],
         initializing: Colors.yellow[20],
       },
-      chevronIconColor: hexToRgba(Colors.brand[95], 0.5),
+      chevronIconColor: Colors.brand[0],
       fontWeight: 500,
     },
     secondary: {
       backgroundColor: {
-        normal: hexToRgba(Colors.brand[95], 0),
-        hover: hexToRgba(Colors.brand[95], 0.03),
-        active: hexToRgba(Colors.brand[95], 0.05),
+        normal: hexToRgba(Colors.brand[0], 0),
+        hover: hexToRgba(Colors.brand[60], 0.5),
+        active: Colors.brand[60],
       },
       color: {
-        normal: Colors.brand[50],
-        hover: Colors.brand[90],
-        active: Colors.brand[90],
+        normal: Colors.brand[0],
+        hover: Colors.brand[0],
+        active: Colors.brand[0],
       },
       fontWeight: 400,
     },
   },
   clusterMenu: {
     backgroundColor: Colors.clusterMenuBackgroundColor,
+    borderColor: Colors.clusterMenuBackgroundColor,
   },
   schema: {
     backgroundColor: {
@@ -960,670 +962,3 @@ export const theme = {
 export type ThemeType = typeof theme;
 export type ClusterColorKey =
   keyof ThemeType['clusterColorPicker']['backgroundColor'];
-
-export const darkTheme: ThemeType = {
-  ...baseTheme,
-  alertBadge: {
-    background: Colors.orange[10],
-    content: {
-      color: Colors.neutral[0],
-    },
-    icon: {
-      color: Colors.orange[100],
-    },
-  },
-  kafkaConectClusters: {
-    statistics: {
-      background: Colors.neutral[95],
-    },
-    statistic: {
-      background: Colors.neutral[90],
-      count: {
-        color: Colors.neutral[0],
-      },
-      header: {
-        color: Colors.neutral[50],
-      },
-    },
-  },
-  auth_page: {
-    backgroundColor: Colors.neutral[90],
-    fontFamily: baseTheme.auth_page.fontFamily,
-    header: {
-      cellBorderColor: Colors.brand[80],
-      LogoBgColor: Colors.brand[0],
-      LogoTextColor: Colors.brand[90],
-    },
-    signIn: {
-      ...baseTheme.auth_page.signIn,
-      titleColor: Colors.brand[0],
-      label: {
-        color: Colors.brand[30],
-      },
-      authCard: {
-        ...baseTheme.auth_page.signIn.authCard,
-        borderColor: Colors.brand[80],
-        backgroundColor: Colors.brand[85],
-        serviceNamecolor: Colors.brand[0],
-      },
-    },
-    footer: {
-      ...baseTheme.auth_page.footer,
-      span: {
-        color: Colors.brand[10],
-        fontWeight: 500,
-      },
-    },
-    icons: {
-      githubColor: Colors.brand[0],
-    },
-  },
-  logo: {
-    color: '#FDFDFD',
-  },
-  version: {
-    currentVersion: {
-      color: Colors.neutral[50],
-    },
-    commitLink: {
-      color: Colors.neutral[10],
-    },
-  },
-  default: {
-    color: {
-      normal: Colors.neutral[0],
-    },
-    backgroundColor: Colors.brand[90],
-    transparentColor: 'transparent',
-  },
-  link: {
-    color: Colors.brand[50],
-    hoverColor: Colors.brand[30],
-  },
-  user: {
-    color: Colors.brand[20],
-    hoverColor: Colors.brand[50],
-  },
-  hr: {
-    backgroundColor: Colors.neutral[80],
-  },
-  pageHeading: {
-    height: '64px',
-    dividerColor: Colors.neutral[50],
-    title: {
-      color: Colors.brand[50],
-    },
-    backLink: {
-      color: {
-        normal: Colors.brand[30],
-        hover: Colors.brand[15],
-      },
-    },
-  },
-  panelColor: {
-    borderTop: Colors.neutral[80],
-  },
-  dropdown: {
-    backgroundColor: Colors.brand[85],
-    borderColor: Colors.brand[70],
-    shadow: Colors.transparency[20],
-    item: {
-      color: {
-        normal: Colors.neutral[0],
-        danger: Colors.red[60],
-      },
-      backgroundColor: {
-        default: Colors.neutral[85],
-        hover: Colors.neutral[80],
-      },
-    },
-  },
-  ksqlDb: {
-    query: {
-      editor: {
-        readonly: {
-          background: Colors.neutral[3],
-        },
-        activeLine: {
-          backgroundColor: Colors.neutral[80],
-        },
-        cell: {
-          backgroundColor: Colors.neutral[75],
-        },
-        layer: {
-          backgroundColor: Colors.neutral[80],
-        },
-        cursor: Colors.neutral[0],
-        variable: Colors.red[50],
-        aceString: Colors.green[60],
-        codeMarker: Colors.yellow[20],
-      },
-    },
-  },
-  button: {
-    primary: {
-      backgroundColor: {
-        normal: Colors.brand[10],
-        hover: Colors.brand[0],
-        active: Colors.brand[20],
-        disabled: Colors.brand[50],
-      },
-      color: {
-        normal: Colors.brand[90],
-        hover: Colors.brand[90],
-        active: Colors.brand[90],
-        disabled: Colors.brand[70],
-      },
-    },
-    secondary: {
-      backgroundColor: {
-        normal: Colors.brand[80],
-        hover: Colors.brand[70],
-        active: Colors.brand[60],
-        disabled: Colors.brand[80],
-      },
-      color: {
-        normal: Colors.brand[0],
-        hover: Colors.brand[0],
-        active: Colors.brand[0],
-        disabled: Colors.brand[70],
-      },
-    },
-    danger: {
-      backgroundColor: {
-        normal: Colors.red[50],
-        hover: Colors.red[55],
-        active: Colors.red[60],
-        disabled: Colors.red[20],
-      },
-      color: {
-        normal: Colors.brand[0],
-        hover: Colors.brand[0],
-        active: Colors.brand[0],
-        disabled: Colors.red[10],
-      },
-    },
-    text: {
-      backgroundColor: {
-        normal: 'transparent',
-        hover: 'transparent',
-        active: 'transparent',
-        disabled: 'transparent',
-      },
-      color: {
-        normal: Colors.brand[10],
-        hover: Colors.brand[0],
-        active: Colors.brand[20],
-        disabled: Colors.brand[30],
-      },
-    },
-    height: {
-      S: '24px',
-      M: '32px',
-      L: '40px',
-    },
-    fontSize: {
-      S: '14px',
-      M: '14px',
-      L: '16px',
-    },
-  },
-  chips: {
-    backgroundColor: {
-      normal: Colors.neutral[80],
-      hover: Colors.neutral[70],
-      active: Colors.neutral[50],
-      hoverActive: Colors.neutral[40],
-    },
-    color: {
-      normal: Colors.neutral[0],
-      hover: Colors.neutral[0],
-      active: Colors.neutral[90],
-      hoverActive: Colors.neutral[90],
-    },
-  },
-  menu: {
-    header: {
-      backgroundColor: Colors.brand[90],
-    },
-    primary: {
-      backgroundColor: {
-        normal: 'transparent',
-        hover: 'transparent',
-        active: 'transparent',
-      },
-      color: {
-        normal: Colors.brand[50],
-        hover: Colors.brand[0],
-        active: Colors.brand[20],
-      },
-      statusIconColor: {
-        online: Colors.green[40],
-        offline: Colors.red[50],
-        initializing: Colors.yellow[20],
-      },
-      chevronIconColor: hexToRgba(Colors.brand[0], 0.5),
-      fontWeight: 500,
-    },
-    secondary: {
-      backgroundColor: {
-        normal: hexToRgba(Colors.brand[0], 0),
-        hover: hexToRgba(Colors.brand[0], 0.05),
-        active: hexToRgba(Colors.brand[0], 0.1),
-      },
-      color: {
-        normal: Colors.brand[40],
-        hover: Colors.brand[0],
-        active: Colors.brand[0],
-      },
-      fontWeight: 400,
-    },
-  },
-  clusterMenu: {
-    backgroundColor: Colors.clusterMenuBackgroundColor,
-  },
-  schema: {
-    backgroundColor: {
-      tr: Colors.neutral[5],
-      div: Colors.neutral[0],
-      p: Colors.neutral[0],
-      textarea: Colors.neutral[85],
-    },
-  },
-  modal: {
-    color: Colors.neutral[0],
-    backgroundColor: Colors.neutral[85],
-    border: {
-      top: Colors.neutral[75],
-      bottom: Colors.neutral[75],
-      contrast: Colors.neutral[75],
-    },
-    overlay: Colors.transparency[10],
-    shadow: Colors.transparency[20],
-    contentColor: Colors.neutral[30],
-  },
-  confirmModal: {
-    backgroundColor: Colors.neutral[80],
-  },
-  table: {
-    actionBar: {
-      backgroundColor: Colors.neutral[90],
-    },
-    th: {
-      backgroundColor: {
-        normal: Colors.neutral[90],
-      },
-      color: {
-        sortable: Colors.neutral[30],
-        normal: Colors.neutral[60],
-        hover: Colors.brand[50],
-        active: Colors.brand[50],
-      },
-      previewColor: {
-        normal: Colors.brand[50],
-      },
-    },
-    td: {
-      borderTop: Colors.neutral[80],
-      color: {
-        normal: Colors.neutral[0],
-      },
-    },
-    tr: {
-      backgroundColor: {
-        normal: Colors.neutral[90],
-        hover: Colors.neutral[85],
-      },
-    },
-    link: {
-      color: {
-        normal: Colors.neutral[0],
-        hover: Colors.neutral[0],
-        active: Colors.neutral[0],
-      },
-    },
-    colored: {
-      color: {
-        attention: Colors.red[50],
-        warning: Colors.yellow[20],
-      },
-    },
-    expander: {
-      normal: Colors.brand[30],
-      hover: Colors.brand[40],
-      active: Colors.brand[50],
-      disabled: Colors.neutral[10],
-    },
-    pagination: {
-      button: {
-        background: Colors.neutral[90],
-        border: Colors.neutral[80],
-      },
-      info: Colors.neutral[0],
-    },
-    filter: {
-      multiSelect: {
-        value: {
-          color: Colors.neutral[10],
-        },
-        closeIcon: {},
-        filterIcon: {
-          fill: {
-            normal: Colors.neutral[50],
-            hover: Colors.neutral[0],
-            active: Colors.brand[30],
-          },
-        },
-      },
-    },
-    resizer: {
-      background: {
-        normal: Colors.neutral[50],
-        hover: Colors.neutral[0],
-        active: Colors.brand[30],
-      },
-    },
-  },
-  primaryTab: {
-    height: '41px',
-    color: {
-      normal: Colors.neutral[50],
-      hover: Colors.neutral[0],
-      active: Colors.brand[30],
-      disabled: Colors.neutral[75],
-    },
-    borderColor: {
-      active: Colors.brand[50],
-      nav: Colors.neutral[80],
-    },
-  },
-  secondaryTab: {
-    backgroundColor: {
-      normal: Colors.neutral[90],
-      hover: Colors.neutral[85],
-      active: Colors.neutral[80],
-    },
-    color: {
-      normal: Colors.neutral[50],
-      hover: Colors.neutral[0],
-      active: Colors.neutral[0],
-    },
-  },
-  switch: {
-    unchecked: Colors.brand[30],
-    hover: Colors.neutral[40],
-    checked: Colors.brand[70],
-    circle: Colors.neutral[0],
-    disabled: Colors.brand[10],
-    checkedIcon: {
-      backgroundColor: Colors.neutral[10],
-    },
-  },
-  select: {
-    backgroundColor: {
-      normal: Colors.neutral[85],
-      hover: Colors.neutral[80],
-      active: Colors.neutral[70],
-    },
-    color: {
-      normal: Colors.neutral[20],
-      hover: Colors.neutral[0],
-      active: Colors.neutral[0],
-      disabled: Colors.neutral[60],
-    },
-    borderColor: {
-      normal: Colors.neutral[70],
-      hover: Colors.neutral[50],
-      active: Colors.neutral[70],
-      disabled: Colors.neutral[70],
-    },
-    optionList: {
-      borderColor: Colors.neutral[70],
-      scrollbar: {
-        backgroundColor: Colors.neutral[30],
-      },
-    },
-    multiSelectOption: {
-      checkbox: {
-        backgroundColor: Colors.neutral[90],
-        borderColor: Colors.neutral[50],
-      },
-    },
-    label: Colors.neutral[50],
-  },
-  input: {
-    borderColor: {
-      normal: Colors.neutral[70],
-      hover: Colors.neutral[50],
-      focus: Colors.neutral[0],
-      disabled: Colors.neutral[80],
-    },
-    color: {
-      normal: Colors.neutral[0],
-      placeholder: {
-        normal: Colors.neutral[60],
-        readOnly: Colors.neutral[0],
-      },
-      disabled: Colors.neutral[80],
-      readOnly: Colors.neutral[0],
-    },
-    backgroundColor: {
-      normal: Colors.neutral[90],
-      readOnly: Colors.neutral[80],
-      disabled: Colors.neutral[90],
-    },
-    error: Colors.red[50],
-    icon: {
-      color: Colors.neutral[30],
-      hover: Colors.neutral[0],
-    },
-    label: {
-      color: Colors.neutral[30],
-    },
-  },
-  metrics: {
-    backgroundColor: Colors.neutral[95],
-    sectionTitle: Colors.neutral[0],
-    indicator: {
-      titleColor: Colors.neutral[0],
-      warningTextColor: Colors.red[50],
-      lightTextColor: Colors.neutral[60],
-    },
-    wrapper: Colors.neutral[0],
-    filters: {
-      color: {
-        icon: Colors.neutral[0],
-        normal: Colors.neutral[50],
-      },
-    },
-  },
-  scrollbar: {
-    trackColor: {
-      normal: Colors.neutral[90],
-      active: Colors.neutral[85],
-    },
-    thumbColor: {
-      normal: Colors.neutral[75],
-      active: Colors.neutral[50],
-    },
-  },
-  consumerTopicContent: {
-    td: {
-      backgroundColor: Colors.neutral[95],
-    },
-  },
-  topicMetaData: {
-    backgroundColor: Colors.neutral[90],
-    color: {
-      label: Colors.neutral[50],
-      value: Colors.neutral[0],
-      meta: Colors.neutral[60],
-    },
-    liderReplica: {
-      color: Colors.green[60],
-    },
-    outOfSync: {
-      color: Colors.red[50],
-    },
-  },
-  viewer: {
-    wrapper: {
-      backgroundColor: Colors.neutral[85],
-      color: Colors.neutral[0],
-    },
-  },
-  activeFilter: {
-    color: Colors.neutral[0],
-    backgroundColor: Colors.neutral[80],
-  },
-  savedFilter: {
-    filterName: Colors.neutral[0],
-    color: Colors.neutral[70],
-  },
-  editFilter: {
-    textColor: Colors.brand[30],
-    deleteIconColor: Colors.brand[30],
-  },
-  heading: {
-    ...baseTheme.heading,
-    h4: Colors.neutral[0],
-    base: {
-      ...baseTheme.heading.base,
-      color: Colors.neutral[0],
-    },
-  },
-  code: {
-    ...baseTheme.code,
-    backgroundColor: Colors.neutral[95],
-  },
-  layout: {
-    ...baseTheme.layout,
-    stuffColor: Colors.neutral[75],
-    stuffBorderColor: Colors.neutral[75],
-    socialLink: Colors.neutral[30],
-  },
-  icons: {
-    ...baseTheme.icons,
-    editIcon: {
-      normal: Colors.neutral[50],
-      hover: Colors.neutral[30],
-      active: Colors.neutral[40],
-      border: Colors.neutral[70],
-    },
-    closeIcon: {
-      normal: Colors.neutral[50],
-      hover: Colors.neutral[30],
-      active: Colors.neutral[40],
-      border: Colors.neutral[70],
-    },
-    cancelIcon: Colors.neutral[0],
-    autoIcon: Colors.neutral[0],
-    fileIcon: Colors.neutral[0],
-    clockIcon: Colors.neutral[0],
-    arrowDownIcon: Colors.neutral[0],
-    moonIcon: Colors.neutral[0],
-    sunIcon: Colors.neutral[0],
-    infoIcon: Colors.neutral[70],
-    savedIcon: Colors.brand[30],
-    github: {
-      ...baseTheme.icons.github,
-      hover: Colors.neutral[70],
-      active: Colors.neutral[85],
-    },
-    discord: {
-      ...baseTheme.icons.discord,
-      normal: Colors.neutral[30],
-    },
-    producthunt: {
-      ...baseTheme.icons.producthunt,
-      normal: Colors.neutral[5],
-    },
-    menuIcon: Colors.brand[0],
-  },
-  textArea: {
-    ...baseTheme.textArea,
-    borderColor: {
-      ...baseTheme.textArea.borderColor,
-      normal: Colors.neutral[70],
-      hover: Colors.neutral[30],
-      focus: Colors.neutral[0],
-    },
-  },
-  clusterConfigForm: {
-    ...baseTheme.clusterConfigForm,
-    groupField: {
-      backgroundColor: Colors.neutral[85],
-    },
-    fileInput: {
-      color: Colors.neutral[0],
-    },
-  },
-  acl: {
-    table: {
-      deleteIcon: Colors.neutral[50],
-    },
-    create: {
-      radioButtons: {
-        green: {
-          normal: {
-            background: Colors.neutral[90],
-            text: Colors.neutral[50],
-            border: Colors.neutral[80],
-          },
-          active: {
-            background: Colors.green[50],
-            text: Colors.neutral[0],
-            border: Colors.green[50],
-          },
-          hover: {
-            background: Colors.green[50],
-            text: Colors.neutral[0],
-            border: Colors.green[50],
-          },
-        },
-        gray: {
-          normal: {
-            background: Colors.neutral[90],
-            text: Colors.neutral[50],
-            border: Colors.neutral[80],
-          },
-          active: {
-            background: Colors.neutral[80],
-            text: Colors.neutral[0],
-            border: Colors.neutral[80],
-          },
-          hover: {
-            background: Colors.neutral[85],
-            text: Colors.neutral[0],
-            border: Colors.neutral[85],
-          },
-        },
-        red: {
-          normal: {
-            background: Colors.neutral[90],
-            text: Colors.neutral[50],
-            border: Colors.neutral[80],
-          },
-          active: {
-            background: Colors.red[50],
-            text: Colors.neutral[0],
-            border: Colors.red[50],
-          },
-          hover: {
-            background: Colors.red[50],
-            text: Colors.neutral[0],
-            border: Colors.red[50],
-          },
-        },
-      },
-    },
-  },
-  clusterColorPicker: {
-    backgroundColor: Colors.clusterColorPicker,
-    outline: Colors.brand[80],
-    transparentCircle: {
-      border: Colors.brand[60],
-      cross: Colors.brand[30],
-    },
-  },
-};

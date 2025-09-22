@@ -41,7 +41,7 @@ export const Sidebar = styled.div<{ $visible: boolean }>(
       opacity 0.25s,
       transform 0.25s,
       -webkit-transform 0.25s;
-    background: ${theme.default.backgroundColor};
+    background: ${theme.menu.header.backgroundColor};
     transform: ${$visible ? 'translateX(0)' : 'translateX(-100%)'};
 
     @media screen and (max-width: 1024px) {

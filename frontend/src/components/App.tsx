@@ -1,4 +1,4 @@
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route, Navigate, useMatch } from 'react-router-dom';
 import {
   accessErrorPage,
@@ -9,13 +9,12 @@ import {
 } from 'lib/paths';
 import PageLoader from 'components/common/PageLoader/PageLoader';
 import { ThemeProvider } from 'styled-components';
-import { theme, darkTheme } from 'theme/theme';
+import { theme } from 'theme/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { showServerError } from 'lib/errorHandling';
 import { Toaster } from 'react-hot-toast';
 import GlobalCSS from 'components/globalCss';
 import * as S from 'components/App.styled';
-import { ThemeModeContext } from 'components/contexts/ThemeModeContext';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import ConfirmationModal from './common/ConfirmationModal/ConfirmationModal';
@@ -49,12 +48,11 @@ const queryClient = new QueryClient({
   },
 });
 const App: React.FC = () => {
-  const { isDarkMode } = useContext(ThemeModeContext);
   const isAuthRoute = useMatch('/login');
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={isDarkMode ? darkTheme : theme}>
+      <ThemeProvider theme={theme}>
         {isAuthRoute ? (
           <AuthPage />
         ) : (
