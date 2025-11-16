@@ -21,7 +21,7 @@ export const IndicatorWrapper = styled.div`
   padding: 12px 16px;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.08);
   flex-grow: 1;
-  color: ${({ theme }) => theme.default.color.normal};
+  color: ${({ theme }) => theme.metrics.wrapper};
 `;
 
 export const IndicatorTitle = styled.div`

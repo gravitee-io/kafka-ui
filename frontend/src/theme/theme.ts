@@ -449,7 +449,7 @@ export const theme = {
   },
   default: {
     color: {
-      normal: Colors.neutral[0],
+      normal: Colors.neutral[50],
     },
     backgroundColor: Colors.brand[3],
     transparentColor: 'transparent',
@@ -839,7 +839,7 @@ export const theme = {
       warningTextColor: Colors.red[50],
       lightTextColor: Colors.neutral[30],
     },
-    wrapper: Colors.neutral[0],
+    wrapper: Colors.neutral[50],
     filters: {
       color: {
         icon: Colors.neutral[90],
