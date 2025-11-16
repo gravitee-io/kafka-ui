@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 public class GsapiSaslMechanism extends SaslMechanism {
 
-    public GsapiSaslMechanism() {
-        super(SaslMechanismType.GSSAPI);
-    }
+  public GsapiSaslMechanism() {
+    super(SaslMechanismType.GSSAPI);
+  }
 
-    private String saslJaasConfig;
+  private String saslJaasConfig;
 }

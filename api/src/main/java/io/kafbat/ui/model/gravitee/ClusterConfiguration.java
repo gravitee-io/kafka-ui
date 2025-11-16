@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClusterConfiguration {
-    private String bootstrapServers;
-    private Security security;
+  private String bootstrapServers;
+  private Security security;
 }

@@ -22,15 +22,11 @@ import java.util.List;
 import java.util.Objects;
 
 
-/**
- * ClustersResponse
- */
 @JsonPropertyOrder({
   ClustersResponse.JSON_PROPERTY_DATA,
   ClustersResponse.JSON_PROPERTY_PAGINATION,
   ClustersResponse.JSON_PROPERTY_LINKS
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-09-08T11:57:00.136036+02:00[Europe/Paris]", comments = "Generator version: 7.12.0")
 public class ClustersResponse {
   public static final String JSON_PROPERTY_DATA = "data";
   @jakarta.annotation.Nullable
@@ -60,10 +56,6 @@ public class ClustersResponse {
     return this;
   }
 
-  /**
-   * List of Clusters.
-   * @return data
-   */
   @jakarta.annotation.Nullable
   @Valid
 
@@ -87,10 +79,6 @@ public class ClustersResponse {
     return this;
   }
 
-  /**
-   * Get pagination
-   * @return pagination
-   */
   @jakarta.annotation.Nullable
   @Valid
 
@@ -114,10 +102,6 @@ public class ClustersResponse {
     return this;
   }
 
-  /**
-   * Get links
-   * @return links
-   */
   @jakarta.annotation.Nullable
   @Valid
 
@@ -136,9 +120,6 @@ public class ClustersResponse {
   }
 
 
-  /**
-   * Return true if this ClustersResponse object is equal to o.
-   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -148,9 +129,9 @@ public class ClustersResponse {
       return false;
     }
     ClustersResponse clustersResponse = (ClustersResponse) o;
-    return Objects.equals(this.data, clustersResponse.data) &&
-        Objects.equals(this.pagination, clustersResponse.pagination) &&
-        Objects.equals(this.links, clustersResponse.links);
+    return Objects.equals(this.data, clustersResponse.data)
+        && Objects.equals(this.pagination, clustersResponse.pagination)
+        && Objects.equals(this.links, clustersResponse.links);
   }
 
   @Override
@@ -160,13 +141,11 @@ public class ClustersResponse {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ClustersResponse {\n");
-    sb.append("    data: ").append(toIndentedString(data)).append("\n");
-    sb.append("    pagination: ").append(toIndentedString(pagination)).append("\n");
-    sb.append("    links: ").append(toIndentedString(links)).append("\n");
-    sb.append("}");
-    return sb.toString();
+    return "class ClustersResponse {\n"
+        + "    data: " + toIndentedString(data) + "\n"
+        + "    pagination: " + toIndentedString(pagination) + "\n"
+        + "    links: " + toIndentedString(links) + "\n"
+        + "}";
   }
 
   /**

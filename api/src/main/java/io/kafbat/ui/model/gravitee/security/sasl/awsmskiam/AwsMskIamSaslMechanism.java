@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 public class AwsMskIamSaslMechanism extends SaslMechanism {
 
-    public AwsMskIamSaslMechanism() {
-        super(SaslMechanismType.AWS_MSK_IAM);
-    }
+  public AwsMskIamSaslMechanism() {
+    super(SaslMechanismType.AWS_MSK_IAM);
+  }
 
-    private String saslJaasConfig;
+  private String saslJaasConfig;
 }

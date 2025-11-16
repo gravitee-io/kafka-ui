@@ -1,9 +1,9 @@
 package io.kafbat.ui.model.gravitee.security.sasl.oauthbearer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.Map;
 import io.kafbat.ui.model.gravitee.security.sasl.SaslMechanism;
 import io.kafbat.ui.model.gravitee.security.sasl.SaslMechanismType;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,18 +11,18 @@ import lombok.Setter;
 @Setter
 public class OauthbearerSaslMechanism extends SaslMechanism {
 
-    public OauthbearerSaslMechanism() {
-        super(SaslMechanismType.OAUTHBEARER);
-    }
+  public OauthbearerSaslMechanism() {
+    super(SaslMechanismType.OAUTHBEARER);
+  }
 
-    private String tokenUrl;
+  private String tokenUrl;
 
-    private String clientId;
+  private String clientId;
 
-    private String clientSecret;
+  private String clientSecret;
 
-    private String scopes;
+  private String scopes;
 
-    @JsonDeserialize(using = ExtensionsDeserializer.class)
-    private Map<String, String> saslExtensions;
+  @JsonDeserialize(using = ExtensionsDeserializer.class)
+  private Map<String, String> saslExtensions;
 }

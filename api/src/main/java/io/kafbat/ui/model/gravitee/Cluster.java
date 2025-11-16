@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Objects;
 
 
-/**
- * Cluster
- */
 @JsonPropertyOrder({
   Cluster.JSON_PROPERTY_ID,
   Cluster.JSON_PROPERTY_CREATED_AT,
@@ -35,7 +32,6 @@ import java.util.Objects;
   Cluster.JSON_PROPERTY_CONFIGURATION,
   Cluster.JSON_PROPERTY_GROUPS
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-09-08T11:57:00.136036+02:00[Europe/Paris]", comments = "Generator version: 7.12.0")
 public class Cluster {
   public static final String JSON_PROPERTY_ID = "id";
   @jakarta.annotation.Nullable
@@ -73,10 +69,6 @@ public class Cluster {
     return this;
   }
 
-  /**
-   * Get id
-   * @return id
-   */
   @jakarta.annotation.Nullable
 
   @JsonProperty(JSON_PROPERTY_ID)
@@ -99,10 +91,6 @@ public class Cluster {
     return this;
   }
 
-  /**
-   * Get createdAt
-   * @return createdAt
-   */
   @jakarta.annotation.Nullable
   @Valid
 
@@ -126,10 +114,6 @@ public class Cluster {
     return this;
   }
 
-  /**
-   * Get updatedAt
-   * @return updatedAt
-   */
   @jakarta.annotation.Nullable
   @Valid
 
@@ -153,10 +137,6 @@ public class Cluster {
     return this;
   }
 
-  /**
-   * Get name
-   * @return name
-   */
   @jakarta.annotation.Nullable
 
   @JsonProperty(JSON_PROPERTY_NAME)
@@ -179,10 +159,6 @@ public class Cluster {
     return this;
   }
 
-  /**
-   * Get description
-   * @return description
-   */
   @jakarta.annotation.Nullable
 
   @JsonProperty(JSON_PROPERTY_DESCRIPTION)
@@ -205,10 +181,6 @@ public class Cluster {
     return this;
   }
 
-  /**
-   * Get configuration
-   * @return configuration
-   */
   @jakarta.annotation.Nullable
 
   @JsonProperty(JSON_PROPERTY_CONFIGURATION)
@@ -239,10 +211,6 @@ public class Cluster {
     return this;
   }
 
-  /**
-   * Get groups
-   * @return groups
-   */
   @jakarta.annotation.Nullable
 
   @JsonProperty(JSON_PROPERTY_GROUPS)
@@ -272,13 +240,13 @@ public class Cluster {
       return false;
     }
     Cluster cluster = (Cluster) o;
-    return Objects.equals(this.id, cluster.id) &&
-        Objects.equals(this.createdAt, cluster.createdAt) &&
-        Objects.equals(this.updatedAt, cluster.updatedAt) &&
-        Objects.equals(this.name, cluster.name) &&
-        Objects.equals(this.description, cluster.description) &&
-        Objects.equals(this.configuration, cluster.configuration) &&
-        Objects.equals(this.groups, cluster.groups);
+    return Objects.equals(this.id, cluster.id)
+        && Objects.equals(this.createdAt, cluster.createdAt)
+        && Objects.equals(this.updatedAt, cluster.updatedAt)
+        && Objects.equals(this.name, cluster.name)
+        && Objects.equals(this.description, cluster.description)
+        && Objects.equals(this.configuration, cluster.configuration)
+        && Objects.equals(this.groups, cluster.groups);
   }
 
   @Override
@@ -288,17 +256,15 @@ public class Cluster {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Cluster {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
-    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    configuration: ").append(toIndentedString(configuration)).append("\n");
-    sb.append("    groups: ").append(toIndentedString(groups)).append("\n");
-    sb.append("}");
-    return sb.toString();
+    return "class Cluster {\n"
+        + "    id: " + toIndentedString(id) + "\n"
+        + "    createdAt: " + toIndentedString(createdAt) + "\n"
+        + "    updatedAt: " + toIndentedString(updatedAt) + "\n"
+        + "    name: " + toIndentedString(name) + "\n"
+        + "    description: " + toIndentedString(description) + "\n"
+        + "    configuration: " + toIndentedString(configuration) + "\n"
+        + "    groups: " + toIndentedString(groups) + "\n"
+        + "}";
   }
 
   /**

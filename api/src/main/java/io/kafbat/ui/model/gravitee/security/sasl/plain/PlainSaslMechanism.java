@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 public class PlainSaslMechanism extends SaslMechanism {
 
-    public PlainSaslMechanism() {
-        super(SaslMechanismType.PLAIN);
-    }
+  public PlainSaslMechanism() {
+    super(SaslMechanismType.PLAIN);
+  }
 
-    private String username;
+  private String username;
 
-    private String password;
+  private String password;
 }

@@ -25,7 +25,8 @@ public class ClustersStatisticsScheduler {
           log.debug("Start getting metrics for kafkaCluster: {}", cluster.getName());
           return statisticsService.updateCache(cluster)
               .doOnSuccess(m -> log.debug("Metrics updated for cluster: {}", cluster.getName()))
-              .onErrorContinue((throwable, o) -> log.error("Error updating metrics for cluster: {}", cluster.getName(), throwable));
+              .onErrorContinue((throwable, o) ->
+                  log.error("Error updating metrics for cluster: {}", cluster.getName(), throwable));
         })
         .then()
         .block();

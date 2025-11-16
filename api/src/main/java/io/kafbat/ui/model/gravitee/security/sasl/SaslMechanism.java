@@ -28,9 +28,9 @@ import lombok.Data;
 @Data
 public abstract class SaslMechanism {
 
-    protected SaslMechanismType type;
+  protected SaslMechanismType type;
 
-    protected SaslMechanism(SaslMechanismType type) {
-        this.type = type;
-    }
+  protected SaslMechanism(SaslMechanismType type) {
+    this.type = type;
+  }
 }

@@ -36,13 +36,17 @@ public class DeserializationService implements Closeable {
                                 ClustersProperties clustersProperties) {
     var serdesInitializer = new SerdesInitializer();
     final AtomicInteger index = new AtomicInteger(0);
-    clustersStorage.getKafkaClusters().forEach(c -> clusterSerdes.put(c.getName(), serdesInitializer.init(env, clustersProperties, index.getAndIncrement())));
+    clustersStorage
+        .getKafkaClusters()
+        .forEach(c ->
+            clusterSerdes.put(c.getName(), serdesInitializer.init(env, clustersProperties, index.getAndIncrement()))
+        );
 
-//    for (int i = 0; i < clustersProperties.getClusters().size(); i++) {
-//      var clusterProperties = clustersProperties.getClusters().get(i);
-//      var cluster = clustersStorage.getClusterByName(clusterProperties.getName()).get();
-//      clusterSerdes.put(cluster.getName(), serdesInitializer.init(env, clustersProperties, i));
-//    }
+    // for (int i = 0; i < clustersProperties.getClusters().size(); i++) {
+    //   var clusterProperties = clustersProperties.getClusters().get(i);
+    //   var cluster = clustersStorage.getClusterByName(clusterProperties.getName()).get();
+    //   clusterSerdes.put(cluster.getName(), serdesInitializer.init(env, clustersProperties, i));
+    // }
   }
 
   public ClusterSerdes getSerdesFor(String clusterName) {

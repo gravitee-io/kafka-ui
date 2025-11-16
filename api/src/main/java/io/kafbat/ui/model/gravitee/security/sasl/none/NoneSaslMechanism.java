@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class NoneSaslMechanism extends SaslMechanism {
 
-    public NoneSaslMechanism() {
-        super(SaslMechanismType.NONE);
-    }
+  public NoneSaslMechanism() {
+    super(SaslMechanismType.NONE);
+  }
 }

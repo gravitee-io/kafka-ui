@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 public class OauthbearerTokenSaslMechanism extends SaslMechanism {
 
-    public OauthbearerTokenSaslMechanism() {
-        super(SaslMechanismType.OAUTHBEARER_TOKEN);
-    }
+  public OauthbearerTokenSaslMechanism() {
+    super(SaslMechanismType.OAUTHBEARER_TOKEN);
+  }
 
-    private String token;
+  private String token;
 }

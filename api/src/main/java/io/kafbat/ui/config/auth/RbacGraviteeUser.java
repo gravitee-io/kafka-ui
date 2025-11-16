@@ -1,12 +1,10 @@
 package io.kafbat.ui.config.auth;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class RbacGraviteeUser implements UserDetails, RbacUser {
   private final ImmutableList<String> clusters;

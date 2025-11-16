@@ -1,5 +1,10 @@
 package io.kafbat.ui.service;
 
+import static org.apache.kafka.common.config.SaslConfigs.SASL_JAAS_CONFIG;
+import static org.apache.kafka.common.config.SaslConfigs.SASL_LOGIN_CALLBACK_HANDLER_CLASS;
+import static org.apache.kafka.common.config.SaslConfigs.SASL_MECHANISM;
+import static org.apache.kafka.common.config.SaslConfigs.SASL_OAUTHBEARER_TOKEN_ENDPOINT_URL;
+
 import com.google.common.collect.ImmutableMap;
 import io.kafbat.ui.config.ClustersProperties;
 import io.kafbat.ui.model.KafkaCluster;
@@ -15,6 +20,12 @@ import io.kafbat.ui.model.gravitee.security.sasl.plain.PlainSaslMechanism;
 import io.kafbat.ui.model.gravitee.security.sasl.scramsha256.ScramSha256SaslMechanism;
 import io.kafbat.ui.model.gravitee.security.sasl.scramsha512.ScramSha512SaslMechanism;
 import io.kafbat.ui.util.WebClientConfigurator;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import javax.security.auth.spi.LoginModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginCallbackHandler;
 import org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule;
@@ -22,17 +33,6 @@ import org.apache.kafka.common.security.plain.PlainLoginModule;
 import org.apache.kafka.common.security.scram.ScramLoginModule;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import javax.security.auth.spi.LoginModule;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.apache.kafka.common.config.SaslConfigs.SASL_JAAS_CONFIG;
-import static org.apache.kafka.common.config.SaslConfigs.SASL_LOGIN_CALLBACK_HANDLER_CLASS;
-import static org.apache.kafka.common.config.SaslConfigs.SASL_MECHANISM;
-import static org.apache.kafka.common.config.SaslConfigs.SASL_OAUTHBEARER_TOKEN_ENDPOINT_URL;
 
 @Component
 @Slf4j
@@ -48,7 +48,7 @@ public class ClustersStorage {
     WebClientConfigurator webClientConfigurator = new WebClientConfigurator().configureBaseUrl(managementApiUrl);
 
     String token = properties.getGravitee().getManagementApiOrgAdminToken();
-    if(token != null && !token.isBlank()) {
+    if (token != null && !token.isBlank()) {
       log.debug("Using token for Gravitee Management API");
       webClientConfigurator.configureBearerAuthentication(token);
     } else {
@@ -60,7 +60,8 @@ public class ClustersStorage {
     }
     WebClient httpClient = webClientConfigurator.build();
 
-    getKafkaClusters(httpClient, properties, factory).forEach(c -> builder.put(c.getName(), create(properties, factory, c)));
+    getKafkaClusters(httpClient)
+        .forEach(c -> builder.put(c.getName(), create(properties, factory, c)));
     this.kafkaClusters = builder.build();
   }
 
@@ -68,11 +69,7 @@ public class ClustersStorage {
     return kafkaClusters.values();
   }
 
-  public Optional<KafkaCluster> getClusterByName(String clusterName) {
-    return Optional.ofNullable(kafkaClusters.get(clusterName));
-  }
-
-  private List<Cluster> getKafkaClusters(WebClient httpClient, ClustersProperties properties, KafkaClusterFactory factory) {
+  private List<Cluster> getKafkaClusters(WebClient httpClient) {
     // Call Clusters resources
     return httpClient
         .get()
@@ -82,6 +79,10 @@ public class ClustersStorage {
         .flatMapIterable(ClustersResponse::getData)
         .collectList()
         .block();
+  }
+
+  public Optional<KafkaCluster> getClusterByName(String clusterName) {
+    return Optional.ofNullable(kafkaClusters.get(clusterName));
   }
 
   private KafkaCluster create(ClustersProperties properties, KafkaClusterFactory factory, Cluster apimCluster) {
@@ -120,7 +121,8 @@ public class ClustersStorage {
         config.put(SASL_LOGIN_CALLBACK_HANDLER_CLASS, OAuthBearerLoginCallbackHandler.class);
         OauthbearerSaslMechanism oauthBearerSaslMechanism = (OauthbearerSaslMechanism) saslMechanism;
         Map<String, String> jaasConfigMap = new HashMap<>(
-            Map.of("clientId", oauthBearerSaslMechanism.getClientId(), "clientSecret", oauthBearerSaslMechanism.getClientSecret())
+            Map.of("clientId", oauthBearerSaslMechanism.getClientId(),
+                "clientSecret", oauthBearerSaslMechanism.getClientSecret())
         );
         if (oauthBearerSaslMechanism.getScopes() != null && !oauthBearerSaslMechanism.getScopes().isEmpty()) {
           jaasConfigMap.put("scope", (oauthBearerSaslMechanism.getScopes()));
@@ -132,12 +134,12 @@ public class ClustersStorage {
         config.put(SASL_OAUTHBEARER_TOKEN_ENDPOINT_URL, oauthBearerSaslMechanism.getTokenUrl());
         break;
       case OAUTHBEARER_TOKEN:
-//        config.put(SASL_LOGIN_CALLBACK_HANDLER_CLASS, OauthbearerCustomTokenCallbackHandler.class);
-//        config.put(
-//            KAFKA_CHANNEL_CONFIG_GRAVITEE_OAUTHBEARER_CUSTOM_TOKEN,
-//            ((OauthbearerTokenSaslMechanism) saslMechanism).getToken()
-//        );
-//        config.put(SASL_JAAS_CONFIG, buildJaasConfig(OAuthBearerLoginModule.class, Collections.emptyMap()));
+        //  config.put(SASL_LOGIN_CALLBACK_HANDLER_CLASS, OauthbearerCustomTokenCallbackHandler.class);
+        //  config.put(
+        //      KAFKA_CHANNEL_CONFIG_GRAVITEE_OAUTHBEARER_CUSTOM_TOKEN,
+        //      ((OauthbearerTokenSaslMechanism) saslMechanism).getToken()
+        //  );
+        //  config.put(SASL_JAAS_CONFIG, buildJaasConfig(OAuthBearerLoginModule.class, Collections.emptyMap()));
         log.warn("OAuthBearerTokenSaslMechanism is not supported yet");
         break;
       case PLAIN:
@@ -156,7 +158,8 @@ public class ClustersStorage {
             SASL_JAAS_CONFIG,
             buildJaasConfig(
                 ScramLoginModule.class,
-                Map.of("username", scramSha256SaslMechanism.getUsername(), "password", scramSha256SaslMechanism.getPassword())
+                Map.of("username", scramSha256SaslMechanism.getUsername(),
+                    "password", scramSha256SaslMechanism.getPassword())
             )
         );
         break;
@@ -166,7 +169,8 @@ public class ClustersStorage {
             SASL_JAAS_CONFIG,
             buildJaasConfig(
                 ScramLoginModule.class,
-                Map.of("username", scramSha512SaslMechanism.getUsername(), "password", scramSha512SaslMechanism.getPassword())
+                Map.of("username", scramSha512SaslMechanism.getUsername(),
+                    "password", scramSha512SaslMechanism.getPassword())
             )
         );
         break;

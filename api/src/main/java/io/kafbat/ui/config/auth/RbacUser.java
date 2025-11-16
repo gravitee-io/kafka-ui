@@ -10,5 +10,5 @@ public interface RbacUser {
 
   default Collection<String> clusters() {
     return Collections.emptyList();
-  };
+  }
 }

@@ -82,8 +82,8 @@ public class AccessControlService {
                   case OAUTH_GITHUB -> new GithubAuthorityExtractor();
                   case OAUTH -> new OauthAuthorityExtractor();
                   default -> null;
-                }
-            ).filter(Objects::nonNull)
+                })
+            .filter(Objects::nonNull)
             .collect(Collectors.toSet()))
         .flatMap(Set::stream)
         .collect(Collectors.toSet());

@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 public class ScramSha512SaslMechanism extends SaslMechanism {
 
-    public ScramSha512SaslMechanism() {
-        super(SaslMechanismType.SCRAM_SHA_512);
-    }
+  public ScramSha512SaslMechanism() {
+    super(SaslMechanismType.SCRAM_SHA_512);
+  }
 
-    private String username;
+  private String username;
 
-    private String password;
+  private String password;
 }
