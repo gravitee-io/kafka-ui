@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.Strings.CI;
 import com.google.common.cache.CacheBuilder;
 import io.kafbat.ui.config.ClustersProperties;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,9 +22,11 @@ import reactor.util.function.Tuple2;
 public abstract class NgramFilter<T> {
   private final Analyzer analyzer;
   private final boolean enabled;
+  private final boolean distanceScore;
 
   public NgramFilter(ClustersProperties.NgramProperties properties, boolean enabled) {
     this.enabled = enabled;
+    this.distanceScore = properties.isDistanceScore();
     this.analyzer = new ShortWordNGramAnalyzer(properties.getNgramMin(), properties.getNgramMax(), false);
   }
 
@@ -35,46 +38,76 @@ public abstract class NgramFilter<T> {
       .asMap();
 
   public List<T> find(String search) {
-    return find(search, true);
+    return find(search, null);
   }
 
-  public List<T> find(String search, boolean sort) {
+  public List<T> find(String search, Comparator<T> comparator) {
     if (search == null || search.isBlank()) {
-      return list(this.getItems().stream().map(Tuple2::getT2), sort);
+      return list(this.getItems().stream().map(Tuple2::getT2), comparator);
     }
     if (!enabled) {
       return list(this.getItems()
           .stream()
           .filter(t -> t.getT1().stream().anyMatch(s -> CI.contains(s, search)))
-          .map(Tuple2::getT2), sort);
+          .map(Tuple2::getT2), comparator);
     }
     try {
       List<SearchResult<T>> result = new ArrayList<>();
       List<String> queryTokens = tokenizeString(analyzer, search);
-      Map<String, Integer> queryFreq = termFreq(queryTokens);
+      Map<String, Integer> queryFreq = Map.of();
+
+      if (!distanceScore) {
+        queryFreq = termFreq(queryTokens);
+      }
 
       for (Tuple2<List<String>, T> item : getItems()) {
         for (String field : item.getT1()) {
           List<String> itemTokens = tokenizeString(analyzer, field);
           HashSet<String> itemTokensSet = new HashSet<>(itemTokens);
           if (itemTokensSet.containsAll(queryTokens)) {
-            double score = cosineSimilarity(queryFreq, itemTokens);
+            double score;
+            if (distanceScore) {
+              score = distanceSimilarity(queryTokens, itemTokens);
+            } else {
+              score = cosineSimilarity(queryFreq, itemTokens);
+            }
             result.add(new SearchResult<>(item.getT2(), score));
+            break;
           }
         }
       }
-      if (sort) {
+
+      if (comparator == null) {
         result.sort((o1, o2) -> Double.compare(o2.score, o1.score));
+      } else {
+        result.sort((o1, o2) -> comparator.compare(o1.item, o2.item));
       }
+
       return result.stream().map(r -> r.item).toList();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  private List<T> list(Stream<T> stream, boolean sort) {
-    if (sort) {
-      return stream.sorted().toList();
+  private double distanceSimilarity(List<String> queryTokens, List<String> itemTokens) {
+    int smallest = Integer.MAX_VALUE;
+    for (String queryToken : queryTokens) {
+      int i = itemTokens.indexOf(queryToken);
+      if (i >= 0) {
+        smallest = Math.min(smallest, i);
+      }
+    }
+
+    if (smallest == Integer.MAX_VALUE) {
+      return 1.0;
+    } else {
+      return 1.0 / (1.0 + smallest);
+    }
+  }
+
+  private List<T> list(Stream<T> stream, Comparator<T> comparator) {
+    if (comparator != null) {
+      return stream.sorted(comparator).toList();
     } else {
       return stream.toList();
     }
@@ -89,7 +122,7 @@ public abstract class NgramFilter<T> {
   }
 
   @SneakyThrows
-  static List<String> tokenizeStringSimple(Analyzer analyzer, String text) {
+  public static List<String> tokenizeStringSimple(Analyzer analyzer, String text) {
     List<String> tokens = new ArrayList<>();
     try (TokenStream tokenStream = analyzer.tokenStream(null, text)) {
       CharTermAttribute attr = tokenStream.addAttribute(CharTermAttribute.class);

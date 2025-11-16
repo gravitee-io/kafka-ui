@@ -11,6 +11,7 @@ import static java.util.stream.Collectors.toList;
 import io.kafbat.ui.api.TopicsApi;
 import io.kafbat.ui.config.ClustersProperties;
 import io.kafbat.ui.mapper.ClusterMapper;
+import io.kafbat.ui.model.FullConnectorInfoDTO;
 import io.kafbat.ui.model.InternalTopic;
 import io.kafbat.ui.model.InternalTopicConfig;
 import io.kafbat.ui.model.PartitionsIncreaseDTO;
@@ -28,6 +29,8 @@ import io.kafbat.ui.model.TopicProducerStateDTO;
 import io.kafbat.ui.model.TopicUpdateDTO;
 import io.kafbat.ui.model.TopicsResponseDTO;
 import io.kafbat.ui.model.rbac.AccessContext;
+import io.kafbat.ui.model.rbac.permission.ConnectAction;
+import io.kafbat.ui.service.KafkaConnectService;
 import io.kafbat.ui.service.TopicsService;
 import io.kafbat.ui.service.analyze.TopicAnalysisService;
 import io.kafbat.ui.service.mcp.McpTool;
@@ -55,6 +58,7 @@ public class TopicsController extends AbstractController implements TopicsApi, M
   private final TopicAnalysisService topicAnalysisService;
   private final ClusterMapper clusterMapper;
   private final ClustersProperties clustersProperties;
+  private final KafkaConnectService kafkaConnectService;
 
   @Override
   public Mono<ResponseEntity<TopicDTO>> createTopic(
@@ -174,6 +178,7 @@ public class TopicsController extends AbstractController implements TopicsApi, M
                                                            @Valid String search,
                                                            @Valid TopicColumnsToSortDTO orderBy,
                                                            @Valid SortOrderDTO sortOrder,
+                                                           Boolean fts,
                                                            ServerWebExchange exchange) {
 
     AccessContext context = AccessContext.builder()
@@ -181,13 +186,14 @@ public class TopicsController extends AbstractController implements TopicsApi, M
         .operationName("getTopics")
         .build();
 
-    return topicsService.getTopicsForPagination(getCluster(clusterName), search, showInternal)
+    return topicsService.getTopicsForPagination(getCluster(clusterName), search, showInternal, fts)
         .flatMap(topics -> accessControlService.filterViewableTopics(topics, clusterName))
         .flatMap(topics -> {
           int pageSize = perPage != null && perPage > 0 ? perPage : DEFAULT_PAGE_SIZE;
           var topicsToSkip = ((page != null && page > 0 ? page : 1) - 1) * pageSize;
-          ClustersProperties.ClusterFtsProperties fts = clustersProperties.getFts();
-          Comparator<InternalTopic> comparatorForTopic = getComparatorForTopic(orderBy, fts.isEnabled());
+          ClustersProperties.ClusterFtsProperties ftsProperties = clustersProperties.getFts();
+          boolean useFts = ftsProperties.use(fts);
+          Comparator<InternalTopic> comparatorForTopic = getComparatorForTopic(orderBy, useFts);
           var comparator = sortOrder == null || !sortOrder.equals(SortOrderDTO.DESC)
               ? comparatorForTopic : comparatorForTopic.reversed();
 
@@ -367,5 +373,24 @@ public class TopicsController extends AbstractController implements TopicsApi, M
       );
       default -> defaultComparator;
     };
+  }
+
+  @Override
+  public Mono<ResponseEntity<Flux<FullConnectorInfoDTO>>> getTopicConnectors(String clusterName,
+                                                                             String topicName,
+                                                                             ServerWebExchange exchange) {
+    var context = AccessContext.builder()
+        .cluster(clusterName)
+        .topicActions(topicName, VIEW)
+        .operationName("getTopicConnectors")
+        .operationParams(topicName)
+        .build();
+
+    Flux<FullConnectorInfoDTO> job = kafkaConnectService.getTopicConnectors(getCluster(clusterName), topicName)
+        .filterWhen(dto -> accessControlService.isConnectAccessible(dto.getConnect(), clusterName));
+
+    return validateAccess(context)
+        .then(Mono.just(ResponseEntity.ok(job)))
+        .doOnEach(sig -> audit(context, sig));
   }
 }

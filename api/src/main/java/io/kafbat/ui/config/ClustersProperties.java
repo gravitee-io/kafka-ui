@@ -43,6 +43,19 @@ public class ClustersProperties {
   CacheProperties cache = new CacheProperties();
   ClusterFtsProperties fts = new ClusterFtsProperties();
 
+  AdminClient adminClient = new AdminClient();
+
+  @Data
+  public static class AdminClient {
+    Integer timeout;
+    int describeConsumerGroupsPartitionSize = 50;
+    int describeConsumerGroupsConcurrency = 4;
+    int listConsumerGroupOffsetsPartitionSize = 50;
+    int listConsumerGroupOffsetsConcurrency = 4;
+    int getTopicsConfigPartitionSize = 200;
+    int describeTopicsPartitionSize = 200;
+  }
+
   GraviteeProperties gravitee = new GraviteeProperties();
 
   @Data
@@ -225,7 +238,6 @@ public class ClustersProperties {
   @AllArgsConstructor
   public static class CacheProperties {
     boolean enabled = true;
-    Duration connectCacheExpiry = Duration.ofMinutes(1);
     Duration connectClusterCacheExpiry = Duration.ofHours(24);
   }
 
@@ -235,17 +247,30 @@ public class ClustersProperties {
   public static class NgramProperties {
     int ngramMin = 1;
     int ngramMax = 4;
+    boolean distanceScore = true;
   }
 
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
   public static class ClusterFtsProperties {
-    boolean enabled = false;
-    NgramProperties schemas = new NgramProperties(1, 4);
-    NgramProperties consumers = new NgramProperties(1, 4);
-    NgramProperties connect = new NgramProperties(1, 4);
-    NgramProperties acl = new NgramProperties(1, 4);
+    boolean enabled = true;
+    boolean defaultEnabled = false;
+    NgramProperties schemas = new NgramProperties(1, 4, true);
+    NgramProperties consumers = new NgramProperties(1, 4, true);
+    NgramProperties connect = new NgramProperties(1, 4, true);
+    NgramProperties acl = new NgramProperties(1, 4, true);
+
+    public boolean use(Boolean request) {
+      if (enabled) {
+        if (Boolean.TRUE.equals(request)) {
+          return true;
+        } else if (request == null && defaultEnabled) {
+          return true;
+        }
+      }
+      return false;
+    }
   }
 
   @PostConstruct

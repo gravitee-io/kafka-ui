@@ -21,6 +21,7 @@ interface TopicsApi {
     @query search?: string,
     @query orderBy?: TopicColumnsToSort,
     @query sortOrder?: SortOrder,
+    @query fts?: boolean
   ): TopicsResponse;
 
   @post
@@ -143,6 +144,15 @@ interface TopicsApi {
     @path topicName: string,
     @body partitionsIncrease: PartitionsIncrease,
   ): PartitionsIncreaseResponse | ApiNotFoundResponse;
+
+  @get
+  @route("/{topicName}/connectors")
+  @operationId("getTopicConnectors")
+  @summary("getTopicConnectors")
+  connectors(
+    @path clusterName: string,
+    @path topicName: string
+  ) : FullConnectorInfo[]
 }
 
 model TopicsResponse {
