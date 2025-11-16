@@ -1,10 +1,10 @@
 auth:
   type: GRAVITEE
-  jwt:
-    secret: myJWT4Gr4v1t33_S3cr3t_F0r_K4fB4t
+ # jwt:
+ #   secret: myJWT4Gr4v1t33_S3cr3t_F0r_K4fB4t
 
 kafka:
-  gravitee:
+ # gravitee:
  #   managementApiUrl: http://localhost:8083/management/v2/organizations/DEFAULT/environments/DEFAULT
  #   managementApiOrgAdminUsername: admin
  #   managementApiOrgAdminPassword: admin
