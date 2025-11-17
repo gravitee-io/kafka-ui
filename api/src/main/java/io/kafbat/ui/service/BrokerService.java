@@ -140,7 +140,11 @@ public class BrokerService {
   }
 
   public Mono<List<MetricSnapshot>> getBrokerMetrics(KafkaCluster cluster, Integer brokerId) {
-    return Mono.justOrEmpty(statisticsCache.get(cluster).getMetrics().getPerBrokerScrapedMetrics().get(brokerId));
+    List<MetricSnapshot> data = statisticsCache.get(cluster).getMetrics().getPerBrokerScrapedMetrics().get(brokerId);
+    if (data == null) {
+      return Mono.just(List.of());
+    }
+    return Mono.just(data);
   }
 
 }
