@@ -19,6 +19,11 @@ import io.kafbat.ui.model.gravitee.security.sasl.oauthbearer.OauthbearerSaslMech
 import io.kafbat.ui.model.gravitee.security.sasl.plain.PlainSaslMechanism;
 import io.kafbat.ui.model.gravitee.security.sasl.scramsha256.ScramSha256SaslMechanism;
 import io.kafbat.ui.model.gravitee.security.sasl.scramsha512.ScramSha512SaslMechanism;
+import io.kafbat.ui.model.gravitee.security.ssl.SslOptions;
+import io.kafbat.ui.model.gravitee.security.ssl.TrustStore;
+import io.kafbat.ui.model.gravitee.security.ssl.jks.JksTrustStore;
+import io.kafbat.ui.model.gravitee.security.ssl.pem.PemTrustStore;
+import io.kafbat.ui.model.gravitee.security.ssl.pkcs12.Pkcs12TrustStore;
 import io.kafbat.ui.util.WebClientConfigurator;
 import java.util.Collection;
 import java.util.HashMap;
@@ -92,15 +97,47 @@ public class ClustersStorage {
     Security security = apimCluster.getConfiguration().getSecurity();
     if (security != null) {
       SecurityProtocol protocol = security.getProtocol();
+
+      // Map SSL truststore config for protocols that use TLS
+      if (protocol == SecurityProtocol.SASL_SSL || protocol == SecurityProtocol.SSL) {
+        mapSslConfig(security.getSsl(), cluster);
+      }
+
       if (protocol == SecurityProtocol.SASL_SSL || protocol == SecurityProtocol.SASL_PLAINTEXT) {
         SaslMechanism saslMechanism = security.getSasl().getMechanism();
         Map<String, Object> saslConfig = createProperties(saslMechanism);
         saslConfig.put("security.protocol", protocol.name());
-        saslConfig.put(SASL_MECHANISM, saslMechanism.getType().name());
+        saslConfig.put(SASL_MECHANISM, saslMechanism.getType().getValue());
         cluster.setProperties(saslConfig);
+      } else if (protocol == SecurityProtocol.SSL) {
+        Map<String, Object> sslConfig = new HashMap<>();
+        sslConfig.put("security.protocol", protocol.name());
+        cluster.setProperties(sslConfig);
       }
     }
     return factory.create(properties, cluster);
+  }
+
+  private static void mapSslConfig(SslOptions ssl, ClustersProperties.Cluster cluster) {
+    if (ssl == null) {
+      return;
+    }
+
+    ClustersProperties.TruststoreConfig truststoreConfig = new ClustersProperties.TruststoreConfig();
+    truststoreConfig.setVerifySsl(ssl.isHostnameVerifier());
+
+    TrustStore trustStore = ssl.getTrustStore();
+    if (trustStore instanceof JksTrustStore jks) {
+      truststoreConfig.setTruststoreLocation(jks.getPath());
+      truststoreConfig.setTruststorePassword(jks.getPassword());
+    } else if (trustStore instanceof Pkcs12TrustStore pkcs12) {
+      truststoreConfig.setTruststoreLocation(pkcs12.getPath());
+      truststoreConfig.setTruststorePassword(pkcs12.getPassword());
+    } else if (trustStore instanceof PemTrustStore pem) {
+      truststoreConfig.setTruststoreLocation(pem.getPath());
+    }
+
+    cluster.setSsl(truststoreConfig);
   }
 
   private static Map<String, Object> createProperties(SaslMechanism saslMechanism) {
